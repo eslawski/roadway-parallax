@@ -156,8 +156,8 @@ function barnGeometry() {
   const body = colorize(new THREE.BoxGeometry(9, 5, 14).translate(0, 2.5, 0), 0x8a3a2b);
   const roof = colorize(
     new THREE.CylinderGeometry(0.5, 0.5, 14, 3, 1)
-      .rotateX(Math.PI / 2)
-      .scale(9.6, 4.4, 1)
+      .rotateX(-Math.PI / 2)
+      .scale(11, 4.4, 1)
       .translate(0, 5.9, 0),
     0x8d9298
   );
