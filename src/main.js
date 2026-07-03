@@ -6,6 +6,7 @@ import { createLighting } from './env/Lighting.js';
 import { RoadwayAPI } from './api/RoadwayAPI.js';
 import { initKeyboard } from './api/Keyboard.js';
 import { initPostMessageBridge } from './api/PostMessageBridge.js';
+import { showWelcomeOverlay } from './ui/WelcomeOverlay.js';
 import { PROFILES } from './road/profiles.js';
 
 const EYE_HEIGHT = 1.25;
@@ -36,6 +37,7 @@ const api = new RoadwayAPI(sim, segments);
 window.roadway = api;
 initKeyboard(api);
 initPostMessageBridge(api);
+showWelcomeOverlay();
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
