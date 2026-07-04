@@ -7,6 +7,7 @@ import { RoadwayAPI } from './api/RoadwayAPI.js';
 import { initKeyboard } from './api/Keyboard.js';
 import { initPostMessageBridge } from './api/PostMessageBridge.js';
 import { showWelcomeOverlay } from './ui/WelcomeOverlay.js';
+import { Bigfoot } from './scenery/Bigfoot.js';
 import { PROFILES } from './road/profiles.js';
 
 const EYE_HEIGHT = 1.25;
@@ -35,9 +36,18 @@ const sim = new Simulation();
 const segments = new SegmentManager(scene, 'highway');
 const api = new RoadwayAPI(sim, segments);
 window.roadway = api;
-initKeyboard(api);
+const bigfoot = new Bigfoot(scene);
+const welcome = showWelcomeOverlay();
+initKeyboard(api, {
+  // Easter egg: he only ventures out on the two-lane backroad, and on the
+  // welcome screen B just dismisses the overlay.
+  onBigfoot: () => {
+    if (!welcome.visible && segments.currentType === 'backroad') {
+      bigfoot.summon(segments.S, sim.speed);
+    }
+  },
+});
 initPostMessageBridge(api);
-showWelcomeOverlay();
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -67,6 +77,7 @@ function frame() {
   lastTime = now;
   const distance = sim.step(dt);
   segments.update(distance);
+  bigfoot.update(dt, segments.S, sim.speed);
   applyCameraMotion(dt);
   renderer.render(scene, camera);
 }

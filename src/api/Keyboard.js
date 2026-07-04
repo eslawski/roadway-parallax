@@ -1,5 +1,6 @@
 // Up/Down arrows: speed +/- 2.5 m/s. Space: pause/resume. 1/2/3: road types.
-export function initKeyboard(api) {
+// B (unlisted): bigfoot easter egg, via extras.onBigfoot.
+export function initKeyboard(api, extras = {}) {
   window.addEventListener('keydown', (e) => {
     switch (e.code) {
       case 'ArrowUp':
@@ -22,6 +23,9 @@ export function initKeyboard(api) {
         break;
       case 'Digit3':
         api.setRoadType('backroad');
+        break;
+      case 'KeyB':
+        extras.onBigfoot?.();
         break;
     }
   });

@@ -199,10 +199,10 @@ export function showWelcomeOverlay() {
   overlay.innerHTML = MARKUP;
   document.body.appendChild(overlay);
 
-  let dismissed = false;
+  const handle = { visible: true };
   function dismiss() {
-    if (dismissed) return;
-    dismissed = true;
+    if (!handle.visible) return;
+    handle.visible = false;
     window.removeEventListener('keydown', dismiss);
     overlay.classList.add('rw-departing');
     // transitionend can be dropped (hidden/throttled tab), so also clean up
@@ -217,4 +217,5 @@ export function showWelcomeOverlay() {
 
   window.addEventListener('keydown', dismiss);
   overlay.addEventListener('pointerdown', dismiss);
+  return handle;
 }
