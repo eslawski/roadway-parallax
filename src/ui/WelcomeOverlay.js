@@ -55,21 +55,6 @@ const STYLES = /* css */ `
     to { transform: translateY(-130vh) scale(2.6) rotateX(58deg); opacity: 0.4; }
   }
 
-  .rw-exit-tab {
-    position: absolute;
-    top: -34px;
-    right: 18px;
-    background: #01703b;
-    border: 3px solid #f4f6f2;
-    border-radius: 10px 10px 0 0;
-    border-bottom: none;
-    padding: 5px 16px 8px;
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
   .rw-title {
     margin: 0;
     font-size: clamp(30px, 5.4vw, 40px);
@@ -169,8 +154,7 @@ const STYLES = /* css */ `
 
 const MARKUP = /* html */ `
   <div class="rw-sign" role="dialog" aria-label="Keyboard controls">
-    <div class="rw-exit-tab">Exit&nbsp;&nbsp;1</div>
-    <h1 class="rw-title">Roadway</h1>
+    <h1 class="rw-title">Roadway Parallax</h1>
     <p class="rw-subtitle">Keyboard controls ahead</p>
     <hr class="rw-rule" />
     <div class="rw-rows">
@@ -179,13 +163,13 @@ const MARKUP = /* html */ `
       <span class="rw-keys"><kbd class="rw-key rw-key--wide">Space</kbd></span>
       <span class="rw-desc">Pause / resume</span>
       <span class="rw-keys"><kbd class="rw-key">1</kbd></span>
-      <span class="rw-desc">Mega highway <small>4 lanes, concrete median</small></span>
+      <span class="rw-desc">Backroad <small>two-lane country road</small></span>
       <span class="rw-keys"><kbd class="rw-key">2</kbd></span>
       <span class="rw-desc">Highway <small>2 lanes, grass median</small></span>
       <span class="rw-keys"><kbd class="rw-key">3</kbd></span>
-      <span class="rw-desc">Backroad <small>two-lane country road</small></span>
+      <span class="rw-desc">Mega highway <small>4 lanes, concrete median</small></span>
     </div>
-    <p class="rw-footer">Press any key to drive</p>
+    <p class="rw-footer">Press any key to start</p>
   </div>
 `;
 

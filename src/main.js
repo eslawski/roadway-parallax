@@ -33,7 +33,7 @@ createSky(scene);
 createLighting(scene);
 
 const sim = new Simulation();
-const segments = new SegmentManager(scene, 'highway');
+const segments = new SegmentManager(scene, 'backroad');
 const api = new RoadwayAPI(sim, segments);
 window.roadway = api;
 const bigfoot = new Bigfoot(scene);

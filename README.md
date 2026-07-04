@@ -1,6 +1,6 @@
-# roadway-parallax
+# Roadway Parallax
 
-A 3D driver's-eye roadway simulation built with Three.js. Renders only the
+A 3D driver's-eye endless roadway scene built with Three.js. Renders only the
 road and environment — no vehicles, no UI chrome — so it can be embedded
 inside a larger cockpit experience. The world streams toward a fixed camera
 in 50 m recycled segments; road-type changes materialize in the fog ~400 m
@@ -18,9 +18,9 @@ npm run build    # static bundle in dist/ (relative base, iframe-friendly)
 
 | key | id | description |
 |-----|------------|-------------|
-| `1` | `mega` | 4 lanes one direction, jersey-barrier median, light poles, guardrail, noise walls, city buildings |
+| `1` | `backroad` | 1 lane each way, double-yellow center line, dense trees, utility poles |
 | `2` | `highway` | 2 lanes one direction, grass median with opposing carriageway, fields, fences, farms |
-| `3` | `backroad` | 1 lane each way, double-yellow center line, dense trees, utility poles |
+| `3` | `mega` | 4 lanes one direction, jersey-barrier median, light poles, guardrail, noise walls, city buildings |
 
 ## Controls
 

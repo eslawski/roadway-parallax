@@ -16,13 +16,13 @@ export function initKeyboard(api, extras = {}) {
         e.preventDefault();
         break;
       case 'Digit1':
-        api.setRoadType('mega');
+        api.setRoadType('backroad');
         break;
       case 'Digit2':
         api.setRoadType('highway');
         break;
       case 'Digit3':
-        api.setRoadType('backroad');
+        api.setRoadType('mega');
         break;
       case 'KeyB':
         extras.onBigfoot?.();
