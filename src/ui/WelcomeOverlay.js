@@ -159,7 +159,7 @@ const MARKUP = /* html */ `
     <hr class="rw-rule" />
     <div class="rw-rows">
       <span class="rw-keys"><kbd class="rw-key">&#8593;</kbd><kbd class="rw-key">&#8595;</kbd></span>
-      <span class="rw-desc">Speed up / slow down <small>&plusmn;2.5 m/s per press</small></span>
+      <span class="rw-desc">Speed up / slow down <small>&plusmn;5 mph per press</small></span>
       <span class="rw-keys"><kbd class="rw-key rw-key--wide">Space</kbd></span>
       <span class="rw-desc">Pause / resume</span>
       <span class="rw-keys"><kbd class="rw-key">1</kbd></span>

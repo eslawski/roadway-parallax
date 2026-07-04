@@ -1,14 +1,14 @@
-// Up/Down arrows: speed +/- 2.5 m/s. Space: pause/resume. 1/2/3: road types.
+// Up/Down arrows: speed +/- 5 mph. Space: pause/resume. 1/2/3: road types.
 // B (unlisted): bigfoot easter egg, via extras.onBigfoot.
 export function initKeyboard(api, extras = {}) {
   window.addEventListener('keydown', (e) => {
     switch (e.code) {
       case 'ArrowUp':
-        api.setSpeed(api.getState().targetSpeed + 2.5);
+        api.setSpeed(api.getState().targetSpeed + 5);
         e.preventDefault();
         break;
       case 'ArrowDown':
-        api.setSpeed(api.getState().targetSpeed - 2.5);
+        api.setSpeed(api.getState().targetSpeed - 5);
         e.preventDefault();
         break;
       case 'Space':

@@ -1,6 +1,6 @@
 // postMessage protocol for driving the sim from a host page (e.g. an iframe
 // parent). Incoming messages:
-//   { type: 'roadway:setSpeed',    value: <m/s> }
+//   { type: 'roadway:setSpeed',    value: <mph> }
 //   { type: 'roadway:setRoadType', value: 'mega' | 'highway' | 'backroad' }
 //   { type: 'roadway:pause' } / { type: 'roadway:resume' } / { type: 'roadway:toggle' }
 //   { type: 'roadway:getState' }

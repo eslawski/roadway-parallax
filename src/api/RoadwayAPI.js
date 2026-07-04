@@ -1,8 +1,9 @@
-import { MAX_SPEED } from '../sim/Simulation.js';
+import { MAX_SPEED, MPS_PER_MPH, MPH_PER_MPS } from '../sim/Simulation.js';
 import { ROAD_TYPES } from '../road/profiles.js';
 
 // Public control surface for the host cockpit. Exposed as window.roadway and
-// mirrored over postMessage (see PostMessageBridge).
+// mirrored over postMessage (see PostMessageBridge). All speeds here are in
+// mph; the simulation itself runs in m/s.
 export class RoadwayAPI {
   constructor(sim, segmentManager) {
     this.sim = sim;
@@ -30,17 +31,17 @@ export class RoadwayAPI {
     for (const cb of this.listeners[event] ?? []) cb(payload);
   }
 
-  setSpeed(mps) {
-    this.sim.setTargetSpeed(Number(mps));
+  setSpeed(mph) {
+    this.sim.setTargetSpeed(Number(mph) * MPS_PER_MPH);
     this.emit('statechange', this.getState());
   }
 
   getSpeed() {
-    return this.sim.speed;
+    return this.sim.speed * MPH_PER_MPS;
   }
 
   get maxSpeed() {
-    return MAX_SPEED;
+    return MAX_SPEED * MPH_PER_MPS;
   }
 
   pause() {
@@ -77,8 +78,8 @@ export class RoadwayAPI {
 
   getState() {
     return {
-      speed: this.sim.speed,
-      targetSpeed: this.sim.targetSpeed,
+      speed: this.sim.speed * MPH_PER_MPS,
+      targetSpeed: this.sim.targetSpeed * MPH_PER_MPS,
       paused: this.sim.paused,
       roadType: this.segments.currentType,
       targetRoadType: this.segments.targetType,

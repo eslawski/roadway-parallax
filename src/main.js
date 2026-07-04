@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Simulation } from './sim/Simulation.js';
+import { Simulation, MAX_SPEED } from './sim/Simulation.js';
 import { SegmentManager } from './road/SegmentManager.js';
 import { createSky, FOG_COLOR } from './env/Sky.js';
 import { createLighting } from './env/Lighting.js';
@@ -59,9 +59,9 @@ window.addEventListener('resize', () => {
 // millimeters — enough to feel alive, never distracting.
 let bobTime = 0;
 function applyCameraMotion(dt) {
-  if (!sim.paused) bobTime += dt * (0.4 + (sim.speed / 55) * 1.1);
+  if (!sim.paused) bobTime += dt * (0.4 + (sim.speed / MAX_SPEED) * 1.1);
   const roughness = PROFILES[segments.currentType].roughness;
-  const amp = (sim.speed / 55) * roughness;
+  const amp = (sim.speed / MAX_SPEED) * roughness;
   camera.position.y =
     EYE_HEIGHT + (Math.sin(bobTime * 7.1) * 0.006 + Math.sin(bobTime * 12.7 + 1.7) * 0.0045) * amp;
   camera.position.x = Math.sin(bobTime * 3.3) * 0.008 * amp;
