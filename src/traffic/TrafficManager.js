@@ -30,17 +30,17 @@ const DEAD_ZONE = 2 * MPH; // same-direction traffic never hovers alongside
 const SEMI_BIAS = -4 * MPH;
 
 const MIN_SPAWN_GAP = 60; // m of clear lane required around a spawn point
-const MAX_VEHICLES = 24;
-const POOL = { car: 12, pickup: 7, semi: 5 };
+const MAX_VEHICLES = 30;
+const POOL = { car: 15, pickup: 9, semi: 6 };
 
 const FOLLOW_MARGIN = 14; // m; follow threshold is this + 1s of headway
 const RECOVER_ACCEL = 1.5; // m/s^2 easing back to cruise speed
 
 // Randomized headway per stream, seconds. null = stream doesn't exist there.
 const SPAWN_INTERVALS = {
-  backroad: { oncoming: [4, 12], same: null },
-  highway: { oncoming: [2.5, 7], same: [4, 10] },
-  mega: { oncoming: [1.5, 5], same: [2.5, 7] },
+  backroad: { oncoming: [3, 9], same: null },
+  highway: { oncoming: [2, 5.5], same: [3, 8] },
+  mega: { oncoming: [1.2, 4], same: [2, 5.5] },
 };
 
 const TYPE_WEIGHTS = {
