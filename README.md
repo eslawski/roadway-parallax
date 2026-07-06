@@ -1,5 +1,7 @@
 # Roadway Parallax
 
+**[▶ Live demo](https://eslawski.github.io/roadway-parallax/)**
+
 A 3D driver's-eye endless roadway scene built with Three.js. Renders only the
 road and environment — no vehicles, no UI chrome — so it can be embedded
 inside a larger cockpit experience. The world streams toward a fixed camera
