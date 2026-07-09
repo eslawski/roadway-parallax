@@ -48,6 +48,9 @@ initKeyboard(api, {
       bigfoot.summon(segments.S, sim.speed);
     }
   },
+  onPullOver: () => {
+    if (!welcome.visible) api.pullOver();
+  },
 });
 initPostMessageBridge(api);
 
@@ -66,18 +69,26 @@ function applyCameraMotion(dt) {
   const amp = (sim.speed / MAX_SPEED) * roughness;
   camera.position.y =
     EYE_HEIGHT + (Math.sin(bobTime * 7.1) * 0.006 + Math.sin(bobTime * 12.7 + 1.7) * 0.0045) * amp;
-  camera.position.x = Math.sin(bobTime * 3.3) * 0.008 * amp;
+  camera.position.x = sim.lateralOffset + Math.sin(bobTime * 3.3) * 0.008 * amp;
   camera.rotation.z = Math.sin(bobTime * 2.1) * 0.0016 * amp;
   camera.rotation.x = baseRotX + Math.sin(bobTime * 9.3) * 0.0006 * amp;
 }
 
 let lastTime = performance.now();
+let wasParked = false;
 function frame() {
   requestAnimationFrame(frame);
   const now = performance.now();
   const dt = Math.min((now - lastTime) / 1000, 0.05);
   lastTime = now;
   const distance = sim.step(dt);
+  // The pull-over maneuver finishes inside sim.step, off the API call path;
+  // forward the one-time parked edge as an event for hosts/keyboard.
+  if (sim.parked && !wasParked) {
+    wasParked = true;
+    api.emit('parked');
+    api.emit('statechange', api.getState());
+  }
   segments.update(distance);
   traffic.update(dt);
   bigfoot.update(dt, segments.S, sim.speed);

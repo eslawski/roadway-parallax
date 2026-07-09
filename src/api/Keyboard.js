@@ -1,4 +1,5 @@
 // Up/Down arrows: speed +/- 5 mph. Space: pause/resume. 1/2/3: road types.
+// P: pull over to the shoulder and park (terminal), via extras.onPullOver.
 // B (unlisted): bigfoot easter egg, via extras.onBigfoot.
 export function initKeyboard(api, extras = {}) {
   window.addEventListener('keydown', (e) => {
@@ -23,6 +24,9 @@ export function initKeyboard(api, extras = {}) {
         break;
       case 'Digit3':
         api.setRoadType('mega');
+        break;
+      case 'KeyP':
+        extras.onPullOver?.();
         break;
       case 'KeyB':
         extras.onBigfoot?.();

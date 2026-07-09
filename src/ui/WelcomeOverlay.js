@@ -168,6 +168,8 @@ const MARKUP = /* html */ `
       <span class="rw-desc">Highway <small>2 lanes, grass median</small></span>
       <span class="rw-keys"><kbd class="rw-key">3</kbd></span>
       <span class="rw-desc">Mega highway <small>4 lanes, concrete median</small></span>
+      <span class="rw-keys"><kbd class="rw-key">P</kbd></span>
+      <span class="rw-desc">Pull over &amp; park <small>eases onto the shoulder &mdash; refresh to drive again</small></span>
     </div>
     <p class="rw-footer">Press any key to start</p>
   </div>
