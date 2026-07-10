@@ -7,9 +7,16 @@ import { RoadwayAPI } from './api/RoadwayAPI.js';
 import { initKeyboard } from './api/Keyboard.js';
 import { initPostMessageBridge } from './api/PostMessageBridge.js';
 import { showWelcomeOverlay } from './ui/WelcomeOverlay.js';
+import { DebugPanel } from './ui/DebugPanel.js';
+import { showEndSign } from './ui/EndSign.js';
 import { Bigfoot } from './scenery/Bigfoot.js';
 import { TrafficManager } from './traffic/TrafficManager.js';
 import { PROFILES } from './road/profiles.js';
+import { ROUTES } from './routes/routes.js';
+import { RouteRunner, validateRoute } from './routes/RouteRunner.js';
+
+// A broken route definition should fail loudly at load, not mid-demo.
+for (const route of ROUTES) validateRoute(route);
 
 const EYE_HEIGHT = 1.25;
 
@@ -39,18 +46,35 @@ const api = new RoadwayAPI(sim, segments);
 window.roadway = api;
 const bigfoot = new Bigfoot(scene);
 const traffic = new TrafficManager(scene, segments, sim);
-const welcome = showWelcomeOverlay();
+
+// Scripted-route mode state; both stay null in Free drive.
+let routeRunner = null;
+let debugPanel = null;
+
+// Runs synchronously on selection, while the picker overlay still masks the
+// world — so the instant resetType rebuild is invisible.
+const welcome = showWelcomeOverlay(ROUTES, (route) => {
+  if (!route) return; // Free drive: exactly today's behavior
+  segments.resetType(route.profile[0].type);
+  api.roadTypeLocked = true;
+  routeRunner = new RouteRunner(route, api, segments);
+  api.routeRunner = routeRunner;
+  api.setSpeed(route.startSpeed ?? 55);
+  debugPanel = new DebugPanel(api, routeRunner);
+});
+api.on('routeEnded', ({ name }) => showEndSign(name));
+
 initKeyboard(api, {
-  // Easter egg: he only ventures out on the two-lane backroad, and on the
-  // welcome screen B just dismisses the overlay.
+  // The picker owns the keyboard until a route is chosen.
+  isActive: () => !welcome.visible,
+  // Easter egg: he only ventures out on the two-lane backroad.
   onBigfoot: () => {
-    if (!welcome.visible && segments.currentType === 'backroad') {
+    if (segments.currentType === 'backroad') {
       bigfoot.summon(segments.S, sim.speed);
     }
   },
-  onPullOver: () => {
-    if (!welcome.visible) api.pullOver();
-  },
+  onPullOver: () => api.pullOver(),
+  onDebugToggle: () => debugPanel?.toggle(),
 });
 initPostMessageBridge(api);
 
@@ -90,6 +114,8 @@ function frame() {
     api.emit('statechange', api.getState());
   }
   segments.update(distance);
+  routeRunner?.update();
+  debugPanel?.update(now);
   traffic.update(dt);
   bigfoot.update(dt, segments.S, sim.speed);
   applyCameraMotion(dt);

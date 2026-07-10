@@ -13,6 +13,12 @@ export class RoadwayAPI {
     this.segments = segmentManager;
     this.listeners = {};
 
+    // Route mode: roadway changes are script-driven only. This single gate
+    // silences both the 1/2/3 keys and incoming postMessage, which all funnel
+    // through setRoadType. Set by main.js when a scripted route starts.
+    this.roadTypeLocked = false;
+    this.routeRunner = null;
+
     segmentManager.on('transitionstart', (e) => this.emit('transitionstart', e));
     segmentManager.on('transitioncomplete', (e) => {
       this.emit('transitioncomplete', e);
@@ -76,6 +82,7 @@ export class RoadwayAPI {
   }
 
   setRoadType(type) {
+    if (this.roadTypeLocked) return; // script-driven route owns the roadway
     if (this.sim.pullingOver) return; // road type is locked once parking
     if (this.segments.setRoadType(type)) {
       this.emit('statechange', this.getState());
@@ -101,6 +108,15 @@ export class RoadwayAPI {
       roadType: this.segments.currentType,
       targetRoadType: this.segments.targetType,
       transitioning: this.segments.transitioning,
+      mode: this.routeRunner ? 'route' : 'free',
+      route: this.routeRunner
+        ? {
+            id: this.routeRunner.route.id,
+            name: this.routeRunner.route.name,
+            distanceMiles: this.routeRunner.distanceMiles,
+            ended: this.routeRunner.ended,
+          }
+        : null,
     };
   }
 }
