@@ -1,7 +1,7 @@
 // First-load welcome screen styled as an overhead interstate guide sign.
-// Doubles as the route picker: the sim will not start until the user chooses
-// a scripted route (number keys / click) or Free drive (F). On selection the
-// sign "drives under" and away, exactly like the old any-key dismissal.
+// Doubles as the route picker: the sim will not start until the user clicks a
+// scripted route or Free drive. On selection the sign "drives under" and away,
+// exactly like the old any-key dismissal.
 
 const STYLES = /* css */ `
   .rw-welcome {
@@ -88,11 +88,8 @@ const STYLES = /* css */ `
   }
 
   .rw-route {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    column-gap: 16px;
-    padding: 9px 14px 9px 10px;
+    display: block;
+    padding: 10px 16px;
     background: rgba(255, 255, 255, 0.07);
     border: 2px solid rgba(244, 246, 242, 0.55);
     border-radius: 11px;
@@ -118,10 +115,16 @@ const STYLES = /* css */ `
 
   .rw-route-name small {
     display: block;
+    margin-top: 3px;
     font-size: 12px;
     font-weight: 400;
     color: rgba(253, 254, 252, 0.6);
     letter-spacing: 0.05em;
+  }
+
+  .rw-route-name small .rw-key {
+    margin: 0 1px;
+    vertical-align: -1px;
   }
 
   .rw-keys {
@@ -155,6 +158,16 @@ const STYLES = /* css */ `
     font-size: 12px;
     border-radius: 6px;
     box-shadow: 0 2px 0 #8a9a8a, 0 3px 5px rgba(8, 20, 14, 0.35);
+  }
+
+  .rw-key--inline {
+    min-width: 21px;
+    height: 21px;
+    padding: 0 5px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 5px;
+    box-shadow: 0 2px 0 #8a9a8a, 0 2px 4px rgba(8, 20, 14, 0.35);
   }
 
   .rw-controls {
@@ -212,8 +225,6 @@ const CONTROLS = /* html */ `
     <span class="rw-desc">Pull over &amp; park <small>refresh to drive again</small></span>
     <span class="rw-keys"><kbd class="rw-key rw-key--small">D</kbd></span>
     <span class="rw-desc">Toggle route info panel <small>routes only</small></span>
-    <span class="rw-keys"><kbd class="rw-key rw-key--small">1</kbd><kbd class="rw-key rw-key--small">2</kbd><kbd class="rw-key rw-key--small">3</kbd></span>
-    <span class="rw-desc">Change roadway <small>free drive only</small></span>
   </div>
 `;
 
@@ -230,7 +241,6 @@ export function showWelcomeOverlay(routes, onSelect) {
     .map(
       (r, i) => /* html */ `
         <button class="rw-route" data-index="${i}">
-          <span class="rw-keys"><kbd class="rw-key">${i + 1}</kbd></span>
           <span class="rw-route-name">${r.name}<small>${r.length.toFixed(1)} mi scripted route</small></span>
         </button>`
     )
@@ -246,8 +256,8 @@ export function showWelcomeOverlay(routes, onSelect) {
       <div class="rw-routes">
         ${routeRows}
         <button class="rw-route" data-index="free">
-          <span class="rw-keys"><kbd class="rw-key">F</kbd></span>
-          <span class="rw-route-name">Free drive<small>change the roadway at will</small></span>
+          <span class="rw-route-name">Free drive<small>Change the roadway at will with
+            <kbd class="rw-key rw-key--inline">1</kbd><kbd class="rw-key rw-key--inline">2</kbd><kbd class="rw-key rw-key--inline">3</kbd></small></span>
         </button>
       </div>
       ${CONTROLS}
@@ -261,7 +271,6 @@ export function showWelcomeOverlay(routes, onSelect) {
   function choose(index) {
     if (!handle.visible) return;
     handle.visible = false;
-    window.removeEventListener('keydown', onKey);
     onSelect(index === 'free' ? null : routes[index]);
 
     overlay.classList.add('rw-departing');
@@ -275,13 +284,6 @@ export function showWelcomeOverlay(routes, onSelect) {
     setTimeout(cleanup, 900);
   }
 
-  function onKey(e) {
-    if (e.code === 'KeyF') choose('free');
-    const n = Number(e.key);
-    if (n >= 1 && n <= routes.length) choose(n - 1);
-  }
-
-  window.addEventListener('keydown', onKey);
   for (const btn of overlay.querySelectorAll('.rw-route')) {
     btn.addEventListener('click', () => {
       const idx = btn.dataset.index;

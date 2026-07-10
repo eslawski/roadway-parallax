@@ -3,8 +3,8 @@
 // P: pull over to the shoulder and park (terminal), via extras.onPullOver.
 // D: toggle the route debug panel, via extras.onDebugToggle.
 // B (unlisted): bigfoot easter egg, via extras.onBigfoot.
-// extras.isActive gates everything (false while the route picker is up, which
-// needs the number keys and F for selection).
+// extras.isActive gates everything (false while the route picker is up, so keys
+// cannot drive a world the user has not started yet).
 export function initKeyboard(api, extras = {}) {
   window.addEventListener('keydown', (e) => {
     if (extras.isActive && !extras.isActive()) return;
