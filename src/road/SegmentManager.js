@@ -58,10 +58,24 @@ export class SegmentManager {
   }
 
   setRoadType(type) {
+    const boundary = Math.ceil((this.S + TRANSITION_DISTANCE) / L) * L;
+    return this.setSpan(type, boundary);
+  }
+
+  // Scripted variant: land the change as close as possible to an absolute
+  // route distance. Snapped to the segment grid (the blend is baked
+  // per-segment), and never closer than TRANSITION_DISTANCE ahead so it still
+  // materializes in the fog.
+  setRoadTypeAt(type, absDistance) {
+    const minBoundary = Math.ceil((this.S + TRANSITION_DISTANCE) / L) * L;
+    const boundary = Math.max(Math.round(absDistance / L) * L, minBoundary);
+    return this.setSpan(type, boundary);
+  }
+
+  setSpan(type, boundary) {
     if (!PROFILES[type]) throw new Error(`Unknown road type: ${type}`);
     if (this.targetType === type) return false;
 
-    const boundary = Math.ceil((this.S + TRANSITION_DISTANCE) / L) * L;
     this.spans = this.spans.filter((s) => s.start < boundary);
     this.spans.push({ start: boundary, type });
 
@@ -72,6 +86,16 @@ export class SegmentManager {
     }
     this.emit('transitionstart', { from: this.currentType, to: type, distance: boundary - this.S });
     return true;
+  }
+
+  // Instantly snap the whole world to one road type (no transition, no
+  // events). Meant to run while an overlay masks the rebuild pop, e.g. when a
+  // scripted route starts on a different type than the welcome default.
+  resetType(type) {
+    if (!PROFILES[type]) throw new Error(`Unknown road type: ${type}`);
+    if (this.spans.length === 1 && this.spans[0].type === type) return;
+    this.spans = [{ start: -Infinity, type }];
+    for (const seg of this.segments) seg.rebuild(seg.k, (r) => this.profileAt(r));
   }
 
   update(distance) {
